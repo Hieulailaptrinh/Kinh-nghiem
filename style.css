@@ -1,0 +1,233 @@
+:root {
+  --bg-color: #f3f3f3;
+  --sidebar-bg: #ffffff;
+  --active-color: #e5e5e5;
+  --accent-color: #0078d4; /* Màu xanh Windows */
+  --text-color: #333;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: var(--bg-color);
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Layout chính: Grid 2 cột */
+.container {
+  display: grid;
+  grid-template-columns: 300px 1fr; /* Trái 300px, Phải tự giãn */
+  height: 100%;
+}
+
+/* Sidebar */
+.sidebar {
+  background: var(--sidebar-bg);
+  border-right: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.add-btn {
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.search-box input {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+#topicList {
+  list-style: none;
+  overflow-y: auto;
+  flex-grow: 1;
+}
+#topicList li {
+  padding: 12px 15px;
+  margin-bottom: 5px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: 0.2s;
+  display: flex;
+  align-items: center;
+}
+#topicList li i {
+  margin-right: 10px;
+  color: #666;
+}
+#topicList li:hover {
+  background-color: var(--bg-color);
+}
+#topicList li.active {
+  background-color: var(--active-color);
+  font-weight: 600;
+  border-left: 4px solid var(--accent-color);
+}
+
+/* Main Content */
+.main-content {
+  padding: 40px;
+  overflow-y: auto;
+  background: #fff;
+}
+.content-title {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: var(--accent-color);
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+.content-body {
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Style cho khối Code (quan trọng cho dev) */
+pre {
+  background: #2d2d2d;
+  color: #f8f8f2;
+  padding: 15px;
+  border-radius: 6px;
+  overflow-x: auto;
+  margin: 15px 0;
+}
+code {
+  font-family: "Consolas", monospace;
+}
+
+/* Modal (Popup) */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal-content {
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 50%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.modal input,
+.modal textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.close {
+  align-self: flex-end;
+  cursor: pointer;
+  font-size: 24px;
+}
+#saveBtn {
+  padding: 10px;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+/* --- PHẦN THÊM VÀO CUỐI FILE STYLE.CSS --- */
+
+/* Nút Menu Mobile (Mặc định ẩn trên PC) */
+.mobile-menu-btn {
+  display: none; /* Ẩn trên Desktop */
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 100;
+  background: var(--accent-color);
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 18px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Overlay (Lớp nền tối khi mở menu) */
+.overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 98;
+}
+
+/* --- MEDIA QUERY CHO MOBILE --- */
+@media (max-width: 768px) {
+  /* 1. Phá vỡ Grid 2 cột -> Chuyển thành 1 cột */
+  .container {
+    display: block; /* Không dùng grid nữa */
+    height: auto;
+  }
+
+  /* 2. Ẩn Sidebar sang bên trái màn hình */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -300px; /* Đẩy hẳn ra ngoài màn hình */
+    width: 280px;
+    height: 100%;
+    z-index: 99;
+    transition: 0.3s ease-in-out;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Class này sẽ được JS thêm vào để hiện Sidebar */
+  .sidebar.active {
+    left: 0; /* Trượt vào */
+  }
+
+  /* 3. Hiển thị nút Menu */
+  .mobile-menu-btn {
+    display: block;
+  }
+
+  /* 4. Điều chỉnh nội dung chính */
+  .main-content {
+    padding: 60px 20px 20px 20px; /* Padding top lớn để tránh nút menu */
+    height: auto; /* Để nội dung dài tự cuộn */
+  }
+
+  /* 5. Chỉnh Modal (Popup) cho vừa điện thoại */
+  .modal-content {
+    width: 90%; /* Chiếm 90% màn hình thay vì 50% */
+    margin: 20% auto;
+  }
+}
